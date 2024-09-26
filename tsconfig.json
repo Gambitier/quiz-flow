@@ -21,7 +21,8 @@
     "moduleResolution": "node", // Ensure module resolution is set to node
     "typeRoots": ["node_modules/@types"],
     "paths": {
-      "@modules/*": ["src/modules/*"]
+      "@modules/*": ["src/modules/*"],
+      "@common/*": ["src/common/*"]
     }
   }
 }
