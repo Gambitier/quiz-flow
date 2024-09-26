@@ -1,7 +1,7 @@
 import { QuestionsController } from '@modules/question/questions.controller';
 import { QuestionsService } from '@modules/question/questions.service';
 import { Module } from '@nestjs/common';
-import { PrismaService } from 'src/prisma.service';
+import { PrismaService } from 'prisma.service';
 
 @Module({
   controllers: [QuestionsController],

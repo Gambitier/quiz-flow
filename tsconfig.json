@@ -10,7 +10,7 @@
     "target": "ES2021",
     "sourceMap": true,
     "outDir": "./dist",
-    "baseUrl": "./",
+    "baseUrl": "./src",
     "incremental": true,
     "skipLibCheck": true,
     "strictNullChecks": false,
@@ -21,8 +21,8 @@
     "moduleResolution": "node", // Ensure module resolution is set to node
     "typeRoots": ["node_modules/@types"],
     "paths": {
-      "@modules/*": ["src/modules/*"],
-      "@common/*": ["src/common/*"]
+      "@modules/*": ["modules/*"],
+      "@common/*": ["common/*"]
     }
   }
 }

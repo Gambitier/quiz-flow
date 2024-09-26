@@ -1,11 +1,11 @@
 /////////////////////////////////////////////////////////////////////
 
-import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library';
-import { PrismaError } from 'prisma-error-enum';
 import {
   DataNotFoundError,
   UniqueConstraintFailedError,
-} from 'src/common/database-error-handler/errors';
+} from '@common/database-error-handler/errors';
+import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library';
+import { PrismaError } from 'prisma-error-enum';
 
 export class PrismaDatabaseErrorHandler {
   public static HandleError(error: any): void {

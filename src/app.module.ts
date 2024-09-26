@@ -3,9 +3,9 @@ import { RolesGuard } from '@modules/auth/guards/role-authz.guard';
 import { UserModule } from '@modules/user/user.module';
 import { Module } from '@nestjs/common';
 import { APP_FILTER, APP_GUARD, APP_INTERCEPTOR } from '@nestjs/core';
-import { AllExceptionsFilter } from 'src/filters/all-exceptions.filter';
-import { APIResponseInterceptor } from 'src/interceptors/api.response.interceptor';
-import { PrismaService } from 'src/prisma.service';
+import { AllExceptionsFilter } from 'filters/all-exceptions.filter';
+import { APIResponseInterceptor } from 'interceptors/api.response.interceptor';
+import { PrismaService } from 'prisma.service';
 import { AuthModule } from './modules/auth/auth.module';
 import { QuestionModule } from './modules/question/question.module';
 
