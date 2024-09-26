@@ -8,10 +8,10 @@ async function main() {
   const seedDataPath = path.join(__dirname, 'questions.json');
   console.log(`seeding from ${seedDataPath}`);
   const content = fs.readFileSync(seedDataPath, 'utf-8');
-  const regionsData = JSON.parse(content);
+  const data = JSON.parse(content);
 
   await prisma.question.createMany({
-    data: regionsData,
+    data: data,
     skipDuplicates: true,
   });
 
