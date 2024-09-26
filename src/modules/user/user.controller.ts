@@ -21,7 +21,6 @@ import {
   Post,
 } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
-import { CreateUserDto } from './models/dto/create-user.dto';
 
 @ApiTags('users')
 @Controller('users')
@@ -33,24 +32,34 @@ export class UserController {
   @AllowAnonymous()
   async createUser(
     @Body() createUserRequest: CreateUserRequest,
-  ): Promise<CreateUserDto> {
+  ): Promise<{ id: string }> {
     const userDomainModel = new CreateUserDomainModel({
       ...createUserRequest,
     });
 
-    return this.userService.createUser(userDomainModel, UserRoleDomain.User);
+    const id = await this.userService.createUser(
+      userDomainModel,
+      UserRoleDomain.User,
+    );
+
+    return { id: id };
   }
 
   @Post('admin')
   @Roles(UserRoleDomain.Admin)
   async createAdmin(
     @Body() createAdminRequest: CreateAdminRequest,
-  ): Promise<CreateUserDto> {
+  ): Promise<{ id: string }> {
     const userDomainModel = new CreateUserDomainModel({
       ...createAdminRequest,
     });
 
-    return this.userService.createUser(userDomainModel, UserRoleDomain.Admin);
+    const id = await this.userService.createUser(
+      userDomainModel,
+      UserRoleDomain.Admin,
+    );
+
+    return { id: id };
   }
 
   @Patch(':id')

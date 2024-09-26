@@ -2,7 +2,7 @@ import {
   CreateUserDomainModel,
   UserRoleDomain,
 } from '@modules/user/models/domain';
-import { CreateUserDto, UserCredentialsDto } from '@modules/user/models/dto';
+import { UserCredentialsDto } from '@modules/user/models/dto';
 import { UpdateUserRequest } from '@modules/user/models/request';
 import { Injectable } from '@nestjs/common';
 import { Role } from '@prisma/client';
@@ -16,7 +16,7 @@ export class UserService {
   async createUser(
     userDomainModel: CreateUserDomainModel,
     userRole: UserRoleDomain,
-  ): Promise<CreateUserDto> {
+  ): Promise<string> {
     let user: { id: string };
 
     try {
@@ -39,7 +39,7 @@ export class UserService {
       PrismaDatabaseErrorHandler.HandleError(error);
     }
 
-    return new CreateUserDto(user);
+    return user.id;
   }
 
   async deleteUser(id: string): Promise<void> {
