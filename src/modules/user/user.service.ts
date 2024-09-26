@@ -6,6 +6,7 @@ import { UserCredentialsDto } from '@modules/user/models/dto';
 import { UpdateUserRequest } from '@modules/user/models/request';
 import { Injectable } from '@nestjs/common';
 import { Role } from '@prisma/client';
+import * as bcrypt from 'bcryptjs';
 import { PrismaDatabaseErrorHandler } from 'src/common/database-error-handler/prisma.error-handler';
 import { PrismaService } from 'src/prisma.service';
 
@@ -18,6 +19,7 @@ export class UserService {
     userRole: UserRoleDomain,
   ): Promise<string> {
     let user: { id: string };
+    const hashedPassword = await bcrypt.hash(userDomainModel.password, 10);
 
     try {
       user = await this.prisma.user.create({
@@ -28,7 +30,7 @@ export class UserService {
           firstName: userDomainModel.firstName,
           lastName: userDomainModel.lastName,
           email: userDomainModel.email,
-          password: userDomainModel.password,
+          password: hashedPassword,
           role: userRole as Role,
           region: {
             connect: { id: userDomainModel.regionId },
