@@ -1,7 +1,6 @@
 export type ApiResponseStatus = 'Suceess' | 'Failuare';
 
 export type APIResponse<dataType = any> = {
-  message: string;
   data: dataType;
 };
 

@@ -6,7 +6,6 @@ import {
   NestInterceptor,
   StreamableFile,
 } from '@nestjs/common';
-import { Reflector } from '@nestjs/core';
 import { Request } from 'express';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
@@ -15,20 +14,9 @@ import { map } from 'rxjs/operators';
 
 @Injectable()
 export class APIResponseInterceptor implements NestInterceptor {
-  /**
-   *
-   */
-  constructor(
-    // @Inject(IAuditService)
-    // private readonly auditService: IAuditService,
-
-    private reflector: Reflector,
-  ) {}
-
-  responseHandler = (response: APIResponse) => {
-    const apiResponse = {
-      message: response.message,
-      data: response.data,
+  responseHandler = (data: any) => {
+    const apiResponse: APIResponse = {
+      data: data,
     };
 
     return apiResponse;
