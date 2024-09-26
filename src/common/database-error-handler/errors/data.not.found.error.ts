@@ -1,0 +1,8 @@
+import { BaseDatabaseError } from 'src/common/database-error-handler/errors/base.database.error';
+
+export class DataNotFoundError extends BaseDatabaseError {
+  constructor(message: string) {
+    super(message);
+    Object.setPrototypeOf(this, new.target.prototype);
+  }
+}

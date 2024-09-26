@@ -10,7 +10,16 @@ import {
   UpdateUserRequest,
 } from '@modules/user/models/request';
 import { UserService } from '@modules/user/user.service';
-import { Body, Controller, Delete, Param, Patch, Post } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  HttpCode,
+  HttpStatus,
+  Param,
+  Patch,
+  Post,
+} from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import { CreateUserDto } from './models/dto/create-user.dto';
 
@@ -20,6 +29,7 @@ export class UserController {
   constructor(private readonly userService: UserService) {}
 
   @Post()
+  @HttpCode(HttpStatus.CREATED)
   @AllowAnonymous()
   async createUser(
     @Body() createUserRequest: CreateUserRequest,
@@ -47,7 +57,7 @@ export class UserController {
   async updateUser(
     @Param('id') id: string,
     @Body() updateUserRequest: UpdateUserRequest,
-  ): Promise<CreateUserDto> {
+  ): Promise<void> {
     return this.userService.updateUser(id, updateUserRequest);
   }
 

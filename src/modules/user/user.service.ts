@@ -6,6 +6,7 @@ import { CreateUserDto, UserCredentialsDto } from '@modules/user/models/dto';
 import { UpdateUserRequest } from '@modules/user/models/request';
 import { Injectable } from '@nestjs/common';
 import { Role } from '@prisma/client';
+import { PrismaDatabaseErrorHandler } from 'src/common/database-error-handler/prisma.error-handler';
 import { PrismaService } from 'src/prisma.service';
 
 @Injectable()
@@ -16,20 +17,27 @@ export class UserService {
     userDomainModel: CreateUserDomainModel,
     userRole: UserRoleDomain,
   ): Promise<CreateUserDto> {
-    const user = await this.prisma.user.create({
-      data: {
-        firstName: userDomainModel.firstName,
-        lastName: userDomainModel.lastName,
-        email: userDomainModel.email,
-        password: userDomainModel.password,
-        role: userRole as Role,
-        region: {
-          connect: { id: userDomainModel.regionId },
-        },
-      },
-    });
+    let user: { id: string };
 
-    // TODO: duplicate email address error handling
+    try {
+      user = await this.prisma.user.create({
+        select: {
+          id: true,
+        },
+        data: {
+          firstName: userDomainModel.firstName,
+          lastName: userDomainModel.lastName,
+          email: userDomainModel.email,
+          password: userDomainModel.password,
+          role: userRole as Role,
+          region: {
+            connect: { id: userDomainModel.regionId },
+          },
+        },
+      });
+    } catch (error) {
+      PrismaDatabaseErrorHandler.HandleError(error);
+    }
 
     return new CreateUserDto(user);
   }
@@ -43,15 +51,12 @@ export class UserService {
   async updateUser(
     id: string,
     updateUserRequest: UpdateUserRequest,
-  ): Promise<CreateUserDto> {
-    const updatedUser = await this.prisma.user.update({
+  ): Promise<void> {
+    await this.prisma.user.update({
+      select: null,
       where: { id },
       data: updateUserRequest,
     });
-
-    // TODO: duplicate email address error handling
-
-    return new CreateUserDto(updatedUser);
   }
 
   async findByEmail(email: string): Promise<UserCredentialsDto | null> {
