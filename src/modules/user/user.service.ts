@@ -1,3 +1,4 @@
+import { PrismaService } from '@app/prisma.service';
 import { PrismaDatabaseErrorHandler } from '@common/database-error-handler/prisma.error-handler';
 import {
   CreateUserDomainModel,
@@ -8,7 +9,6 @@ import { UpdateUserRequest } from '@modules/user/models/request';
 import { Injectable } from '@nestjs/common';
 import { Role } from '@prisma/client';
 import * as bcrypt from 'bcryptjs';
-import { PrismaService } from 'prisma.service';
 
 @Injectable()
 export class UserService {

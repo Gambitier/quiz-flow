@@ -1,13 +1,13 @@
+import { AllExceptionsFilter } from '@app/filters/all-exceptions.filter';
+import { APIResponseInterceptor } from '@app/interceptors/api.response.interceptor';
+import { PrismaService } from '@app/prisma.service';
+import { AuthModule } from '@modules/auth/auth.module';
 import { JwtGuard } from '@modules/auth/guards/jwt-auth.guard';
 import { RolesGuard } from '@modules/auth/guards/role-authz.guard';
+import { QuestionModule } from '@modules/question/question.module';
 import { UserModule } from '@modules/user/user.module';
 import { Module } from '@nestjs/common';
 import { APP_FILTER, APP_GUARD, APP_INTERCEPTOR } from '@nestjs/core';
-import { AllExceptionsFilter } from 'filters/all-exceptions.filter';
-import { APIResponseInterceptor } from 'interceptors/api.response.interceptor';
-import { PrismaService } from 'prisma.service';
-import { AuthModule } from './modules/auth/auth.module';
-import { QuestionModule } from './modules/question/question.module';
 
 @Module({
   imports: [UserModule, AuthModule, QuestionModule],
