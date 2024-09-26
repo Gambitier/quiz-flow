@@ -5,9 +5,10 @@ import { AllExceptionsFilter } from 'src/filters/all-exceptions.filter';
 import { APIResponseInterceptor } from 'src/interceptors/api.response.interceptor';
 import { PrismaService } from 'src/prisma.service';
 import { AuthModule } from './modules/auth/auth.module';
+import { QuestionModule } from './modules/question/question.module';
 
 @Module({
-  imports: [UserModule, AuthModule],
+  imports: [UserModule, AuthModule, QuestionModule],
   providers: [
     PrismaService,
     {
