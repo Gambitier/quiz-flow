@@ -20,9 +20,10 @@ import {
   Patch,
   Post,
 } from '@nestjs/common';
-import { ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 
 @ApiTags('users')
+@ApiBearerAuth('authorization')
 @Controller('users')
 export class UserController {
   constructor(private readonly userService: UserService) {}

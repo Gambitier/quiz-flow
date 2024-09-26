@@ -1,10 +1,11 @@
 import { Controller, Get, Param, ParseUUIDPipe } from '@nestjs/common';
-import { ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { QuestionAssignmentResponseDto } from './models/dto/question-assignment-response.dto';
 import { QuestionResponseDto } from './models/dto/question-response.dto';
 import { QuestionsService } from './questions.service';
 
 @ApiTags('questions')
+@ApiBearerAuth('authorization')
 @Controller('questions')
 export class QuestionsController {
   constructor(private readonly questionsService: QuestionsService) {}
