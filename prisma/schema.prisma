@@ -36,22 +36,37 @@ model Question {
 }
 
 model Region {
-  id                  String               @id @default(uuid()) @db.Uuid
-  name                String               @unique
-  users               User[]
-  questionAssignments QuestionAssignment[]
+  id                    String                  @id @default(uuid()) @db.Uuid
+  name                  String                  @unique
+  users                 User[]
+  questionAssignments   QuestionAssignment[]
+  regionalQuestionCycle RegionalQuestionCycle[]
 }
 
 model QuestionAssignment {
-  id               String    @id @default(uuid()) @db.Uuid
-  regionId         String    @db.Uuid
-  questionId       String    @db.Uuid
-  question         Question  @relation(fields: [questionId], references: [id])
-  region           Region    @relation(fields: [regionId], references: [id])
-  scheduledStartAt DateTime?
-  scheduledEndAt   DateTime?
-  createdAt        DateTime  @default(now())
-  updatedAt        DateTime  @updatedAt
+  id         String                 @id @default(uuid()) @db.Uuid
+  regionId   String                 @db.Uuid
+  questionId String                 @db.Uuid
+  question   Question               @relation(fields: [questionId], references: [id])
+  region     Region                 @relation(fields: [regionId], references: [id])
+  createdAt  DateTime               @default(now())
+  updatedAt  DateTime               @updatedAt
+  cycle      RegionalQuestionCycle?
 
   @@unique([regionId, questionId])
+}
+
+model RegionalQuestionCycle {
+  id                   String             @id @default(uuid()) @db.Uuid
+  questionAssignmentId String             @unique @db.Uuid
+  questionAssignment   QuestionAssignment @relation(fields: [questionAssignmentId], references: [id])
+  regionId             String             @db.Uuid
+  region               Region             @relation(fields: [regionId], references: [id])
+  iteration            Int
+  cycleStart           DateTime
+  cycleEnd             DateTime
+  createdAt            DateTime           @default(now())
+  updatedAt            DateTime           @updatedAt
+
+  @@unique([questionAssignmentId, iteration])
 }
