@@ -48,7 +48,6 @@ model QuestionAssignment {
   questionId       String    @db.Uuid
   question         Question  @relation(fields: [questionId], references: [id])
   region           Region    @relation(fields: [regionId], references: [id])
-  cycleDuration    String?
   scheduledStartAt DateTime?
   scheduledEndAt   DateTime?
   createdAt        DateTime  @default(now())
