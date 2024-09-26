@@ -1,0 +1,92 @@
+[
+  {
+    "id": "550e8400-e29b-41d4-a716-446655440000",
+    "content": "What is your favorite color?",
+    "meta": {
+      "type": "select:single",
+      "choices": ["Red", "Green", "Blue", "Yellow"]
+    }
+  },
+  {
+    "id": "550e8400-e29b-41d4-a716-446655440001",
+    "content": "Select the programming languages you know:",
+    "meta": {
+      "type": "select:multi",
+      "choices": ["JavaScript", "Python", "Java", "C#"],
+      "maxSelections": 3
+    }
+  },
+  {
+    "id": "550e8400-e29b-41d4-a716-446655440002",
+    "content": "What is your age?",
+    "meta": {
+      "type": "input:number",
+      "min": 18,
+      "max": 100
+    }
+  },
+  {
+    "id": "550e8400-e29b-41d4-a716-446655440003",
+    "content": "Describe yourself in one sentence.",
+    "meta": {
+      "type": "input:text",
+      "placeholder": "Enter your answer"
+    }
+  },
+  {
+    "id": "550e8400-e29b-41d4-a716-446655440004",
+    "content": "What is your birth date?",
+    "meta": {
+      "type": "input:date"
+    }
+  },
+  {
+    "id": "550e8400-e29b-41d4-a716-446655440005",
+    "content": "How satisfied are you with our service?",
+    "meta": {
+      "type": "select:single",
+      "choices": [
+        "Very Satisfied",
+        "Satisfied",
+        "Neutral",
+        "Unsatisfied",
+        "Very Unsatisfied"
+      ]
+    }
+  },
+  {
+    "id": "550e8400-e29b-41d4-a716-446655440006",
+    "content": "Which cities have you visited in the past year?",
+    "meta": {
+      "type": "select:multi",
+      "choices": ["New York", "Tokyo", "Paris", "Sydney", "Mumbai"],
+      "maxSelections": 5
+    }
+  },
+  {
+    "id": "550e8400-e29b-41d4-a716-446655440007",
+    "content": "Rate your experience with our product.",
+    "meta": {
+      "type": "input:number",
+      "min": 1,
+      "max": 10
+    }
+  },
+  {
+    "id": "550e8400-e29b-41d4-a716-446655440008",
+    "content": "What is your preferred mode of transportation?",
+    "meta": {
+      "type": "select:single",
+      "choices": ["Car", "Bicycle", "Public Transport", "Walking"]
+    }
+  },
+  {
+    "id": "550e8400-e29b-41d4-a716-446655440009",
+    "content": "Which of these devices do you own?",
+    "meta": {
+      "type": "select:multi",
+      "choices": ["Smartphone", "Laptop", "Tablet", "Smartwatch"],
+      "maxSelections": 4
+    }
+  }
+]
