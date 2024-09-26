@@ -43,7 +43,7 @@ model Region {
 }
 
 model QuestionAssignment {
-  id               Int       @id @default(autoincrement())
+  id               String    @id @default(uuid()) @db.Uuid
   regionId         String    @db.Uuid
   questionId       String    @db.Uuid
   question         Question  @relation(fields: [questionId], references: [id])
