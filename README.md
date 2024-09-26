@@ -20,6 +20,7 @@ npx prisma migrate dev
 seed required data
 
 ```shell
+npm run seed:admin
 npm run seed:regions
 npm run seed:questions
 npm run seed:question-assignments

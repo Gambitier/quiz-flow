@@ -18,6 +18,7 @@
     "test:cov": "jest --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
     "test:e2e": "jest --config ./test/jest-e2e.json",
+    "seed:admin": "ts-node -r tsconfig-paths/register ./src/seeder/admin/seeder.ts",
     "seed:regions": "ts-node ./src/seeder/regions/seeder.ts",
     "seed:questions": "ts-node ./src/seeder/questions/seeder.ts",
     "seed:question-assignments": "ts-node ./src/seeder/question-assignments/seeder.ts"
