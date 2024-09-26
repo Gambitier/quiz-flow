@@ -1,0 +1,57 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Role {
+  ADMIN
+  USER
+}
+
+model User {
+  id        String   @id @default(uuid()) @db.Uuid
+  firstName String
+  lastName  String
+  email     String   @unique
+  password  String
+  role      Role     @default(USER)
+  regionId  String
+  region    Region   @relation(fields: [regionId], references: [id])
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Question {
+  id                  String               @id @default(uuid()) @db.Uuid
+  content             String
+  isDeleted           Boolean              @default(false)
+  createdAt           DateTime             @default(now())
+  updatedAt           DateTime             @updatedAt
+  questionAssignments QuestionAssignment[]
+}
+
+model Region {
+  id                  String               @id @default(uuid()) @db.Uuid
+  name                String               @unique
+  users               User[]
+  questionAssignments QuestionAssignment[]
+}
+
+model QuestionAssignment {
+  id               Int       @id @default(autoincrement())
+  regionId         String
+  questionId       String
+  question         Question  @relation(fields: [questionId], references: [id])
+  region           Region    @relation(fields: [regionId], references: [id])
+  cycleDuration    String?
+  scheduledStartAt DateTime?
+  scheduledEndAt   DateTime?
+  createdAt        DateTime  @default(now())
+  updatedAt        DateTime  @updatedAt
+
+  @@unique([regionId, questionId])
+}
