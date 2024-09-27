@@ -21,7 +21,7 @@ import { RegionalQuestionCycleService } from './regional-question-cycle.service'
 export class RegionalQuestionCycleController {
   constructor(private readonly cycleService: RegionalQuestionCycleService) {}
 
-  @Post('add')
+  @Post('')
   @HttpCode(HttpStatus.CREATED)
   @Roles(UserRoleDomain.Admin)
   async addNewCycle(@Body() addNewCycleReq: AddNewCycleRequest): Promise<void> {
