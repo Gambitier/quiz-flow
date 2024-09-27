@@ -39,11 +39,11 @@ npm run start:prod
 
 ```mermaid
 flowchart TD
-  subgraph Admin_Actions
+  subgraph Admin Actions
     A[Admin Adds New Cycle] -->|Creates Cycle| B[(Database: RegionalQuestionCycle)]
   end
   
-  subgraph Queue_Processor
+  subgraph Queue Processor
     B --> C[/Queue: Schedule Next Cycle/]
     C --> D[[Processor: Schedule Next Cycle]]
     D -->|Check if Overlapping Cycle Exists| E{Cycle Overlap?}
@@ -53,7 +53,7 @@ flowchart TD
     G -->|Yes: Create next cycle| B
   end
 
-  subgraph Queue_Retry_Mechanism
+  subgraph Queue Retry Mechanism
     D --> H[Retry 3 times if error]
   end
 ```
