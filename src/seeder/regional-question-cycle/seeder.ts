@@ -16,10 +16,16 @@ async function main() {
 
   for (const cycle of data) {
     try {
+      const randomHours = Math.floor(Math.random() * 7) + 2; // 2 to 8 hours
+
+      const cycleStart = new Date();
+      const cycleEnd = new Date(cycleStart);
+      cycleEnd.setHours(cycleEnd.getHours() + randomHours);
+
       await service.addNewCycle({
         ...cycle,
-        cycleStart: new Date(cycle.cycleStart),
-        cycleEnd: new Date(cycle.cycleEnd),
+        cycleStart: cycleStart,
+        cycleEnd: cycleEnd,
       });
 
       console.log(
