@@ -1,4 +1,4 @@
-import { PrismaService } from '@app/prisma.service';
+import { PrismaService } from '@modules/prisma/prisma.service';
 import { Injectable } from '@nestjs/common';
 import { QuestionAssignmentResponseDto } from './models/dto/question-assignment-response.dto';
 import { QuestionResponseDto } from './models/dto/question-response.dto';

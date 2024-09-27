@@ -1,6 +1,5 @@
 import { AllExceptionsFilter } from '@app/filters/all-exceptions.filter';
 import { APIResponseInterceptor } from '@app/interceptors/api.response.interceptor';
-import { PrismaService } from '@app/prisma.service';
 import { AuthModule } from '@modules/auth/auth.module';
 import { JwtGuard } from '@modules/auth/guards/jwt-auth.guard';
 import { RolesGuard } from '@modules/auth/guards/role-authz.guard';
@@ -9,6 +8,7 @@ import { RegionalQuestionCycleModule } from '@modules/regional-question-cycle/mo
 import { UserModule } from '@modules/user/user.module';
 import { Module } from '@nestjs/common';
 import { APP_FILTER, APP_GUARD, APP_INTERCEPTOR } from '@nestjs/core';
+import { PrismaModule } from './modules/prisma/prisma.module';
 
 @Module({
   imports: [
@@ -16,9 +16,9 @@ import { APP_FILTER, APP_GUARD, APP_INTERCEPTOR } from '@nestjs/core';
     AuthModule,
     QuestionModule,
     RegionalQuestionCycleModule,
+    PrismaModule,
   ],
   providers: [
-    PrismaService,
     {
       provide: APP_INTERCEPTOR,
       useClass: APIResponseInterceptor,

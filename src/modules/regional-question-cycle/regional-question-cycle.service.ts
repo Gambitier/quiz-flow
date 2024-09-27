@@ -1,4 +1,4 @@
-import { PrismaService } from '@app/prisma.service';
+import { PrismaService } from '@modules/prisma/prisma.service';
 import { AddNewCycleDomainModel } from '@modules/regional-question-cycle/models/domain/';
 import { Injectable } from '@nestjs/common';
 

@@ -1,8 +1,9 @@
-import { PrismaService } from '@app/prisma.service';
+import { PrismaModule } from '@modules/prisma/prisma.module';
 import { Module } from '@nestjs/common';
 import { RegionalQuestionCycleService } from './regional-question-cycle.service';
 
 @Module({
-  providers: [PrismaService, RegionalQuestionCycleService],
+  imports: [PrismaModule],
+  providers: [RegionalQuestionCycleService],
 })
 export class RegionalQuestionCycleModule {}

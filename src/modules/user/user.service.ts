@@ -1,5 +1,5 @@
-import { PrismaService } from '@app/prisma.service';
 import { PrismaDatabaseErrorHandler } from '@common/database-error-handler/prisma.error-handler';
+import { PrismaService } from '@modules/prisma/prisma.service';
 import {
   CreateUserDomainModel,
   UserRoleDomain,
