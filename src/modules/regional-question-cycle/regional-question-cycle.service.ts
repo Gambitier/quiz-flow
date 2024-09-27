@@ -1,16 +1,24 @@
 import { PrismaService } from '@modules/prisma/prisma.service';
+import { CycleQueue } from '@modules/regional-question-cycle/constants';
 import { AddNewCycleDomainModel } from '@modules/regional-question-cycle/models/domain/';
 import { CurrentCycleQuestionDto } from '@modules/regional-question-cycle/models/dto';
+import { InjectQueue } from '@nestjs/bullmq';
 import {
   BadRequestException,
   ConflictException,
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
+import { Queue } from 'bullmq';
 
 @Injectable()
 export class RegionalQuestionCycleService {
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(
+    private readonly prisma: PrismaService,
+    @InjectQueue(CycleQueue) private readonly cycleQueue: Queue,
+    private readonly configService: ConfigService,
+  ) {}
 
   async addNewCycle(data: AddNewCycleDomainModel): Promise<void> {
     const { id, regionId, cycleStart, cycleEnd } = data;
@@ -47,6 +55,33 @@ export class RegionalQuestionCycleService {
         cycleEnd: cycleEnd,
       },
     });
+
+    const defaultDurationInHours = this.configService.get<number>(
+      'questionCycle.defaultDurationInHours',
+    );
+
+    const nextCycleStart = new Date(cycleEnd);
+    nextCycleStart.setSeconds(nextCycleStart.getSeconds() + 1);
+
+    const nextCycleEnd = new Date(nextCycleStart);
+    nextCycleEnd.setHours(nextCycleEnd.getHours() + defaultDurationInHours);
+
+    await this.cycleQueue.add(
+      `schedule-next-cycle:${regionId}:${cycleStart.toISOString()}`,
+      {
+        regionId,
+        cycleStart: nextCycleStart,
+        cycleEnd: nextCycleEnd,
+      },
+      {
+        attempts: 3,
+        backoff: {
+          type: 'exponential',
+          delay: 60000,
+        },
+        removeOnComplete: true,
+      },
+    );
   }
 
   private async getUnassignedQuestionId(
