@@ -9,15 +9,24 @@ export class RegionalQuestionCycleService {
   async addNewCycle(data: AddNewCycleDomainModel): Promise<void> {
     const { id, regionId, cycleStart, cycleEnd } = data;
 
-    // TODO::P1: validate if cycleStart < cycleEnd
-
-    const unassignedQuestionId = await this.getUnassignedQuestionId(regionId);
-
-    if (!unassignedQuestionId) {
-      throw new Error('new question for a given region is not available');
+    if (cycleStart >= cycleEnd) {
+      throw new Error('Cycle start date must be before cycle end date.');
     }
 
-    // TODO::P1: check if cycleStart falls within any cycle
+    const overlappingCycle = await this.cycleOverlapsWithExisting(
+      regionId,
+      cycleStart,
+    );
+    if (overlappingCycle) {
+      throw new Error(
+        'A cycle already exists for this region during the specified time range.',
+      );
+    }
+
+    const unassignedQuestionId = await this.getUnassignedQuestionId(regionId);
+    if (!unassignedQuestionId) {
+      throw new Error('No new questions are available for this region.');
+    }
 
     await this.prisma.regionalQuestionCycle.create({
       data: {
@@ -30,7 +39,9 @@ export class RegionalQuestionCycleService {
     });
   }
 
-  private async getUnassignedQuestionId(regionId: string): Promise<string> {
+  private async getUnassignedQuestionId(
+    regionId: string,
+  ): Promise<string | null> {
     const unassignedQuestion = await this.prisma.questionAssignment.findFirst({
       where: {
         regionId: regionId,
@@ -41,6 +52,23 @@ export class RegionalQuestionCycleService {
       },
     });
 
-    return unassignedQuestion.id;
+    return unassignedQuestion?.id || null;
+  }
+
+  private async cycleOverlapsWithExisting(
+    regionId: string,
+    cycleStart: Date,
+  ): Promise<boolean> {
+    const overlappingCycle = await this.prisma.regionalQuestionCycle.findFirst({
+      select: {
+        id: true,
+      },
+      where: {
+        regionId: regionId,
+        cycleEnd: { gte: cycleStart }, // table has cycleEnd gte cycleStart
+      },
+    });
+
+    return !overlappingCycle?.id;
   }
 }
