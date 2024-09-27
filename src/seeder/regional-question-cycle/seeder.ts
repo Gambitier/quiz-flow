@@ -1,51 +1,44 @@
-import { PrismaClient } from '@prisma/client';
+import { AppModule } from '@app/app.module';
+import { AddNewCycleDomainModel } from '@modules/regional-question-cycle/models/domain';
+import { RegionalQuestionCycleService } from '@modules/regional-question-cycle/regional-question-cycle.service';
+import { NestFactory } from '@nestjs/core';
 import * as fs from 'fs';
 import * as path from 'path';
 
-const prisma = new PrismaClient();
-
 async function main() {
+  const app = await NestFactory.createApplicationContext(AppModule);
+  const service = app.get(RegionalQuestionCycleService);
+
   const seedDataPath = path.join(__dirname, 'cycles.json');
   console.log(`seeding from ${seedDataPath}`);
   const content = fs.readFileSync(seedDataPath, 'utf-8');
-  const data = JSON.parse(content);
+  const data = JSON.parse(content) as AddNewCycleDomainModel[];
 
   for (const cycle of data) {
     try {
-      await prisma.regionalQuestionCycle.upsert({
-        where: { id: cycle.id },
-        update: {
-          cycleStart: new Date(cycle.cycleStart),
-          cycleEnd: new Date(cycle.cycleEnd),
-          iteration: cycle.iteration,
-          regionId: cycle.regionId,
-        },
-        create: {
-          id: cycle.id,
-          regionId: cycle.regionId,
-          cycleStart: new Date(cycle.cycleStart),
-          cycleEnd: new Date(cycle.cycleEnd),
-          iteration: cycle.iteration,
-        },
+      const randomNum = Math.floor(Math.random() * 7) + 2; // 2 to 8
+
+      const cycleStart = new Date();
+      const cycleEnd = new Date(cycleStart);
+      cycleEnd.setMinutes(cycleEnd.getMinutes() + randomNum);
+
+      await service.addNewCycle({
+        ...cycle,
+        cycleStart: cycleStart,
+        cycleEnd: cycleEnd,
       });
 
       console.log(
-        `Cycle for region ${cycle.regionId} (ID: ${cycle.id}) upserted successfully.`,
+        `cycle created with ID: ${cycle.id} for regionId: ${cycle.regionId}`,
       );
     } catch (error) {
       console.error(
-        `Error upserting cycle for region ${cycle.regionId} (ID: ${cycle.id}):`,
+        `error creating cycle with ID: ${cycle.id} for regionId: ${cycle.regionId}: `,
         error,
       );
     }
   }
+  await app.close();
 }
 
-main()
-  .catch((e) => {
-    console.error(e);
-    process.exit(1);
-  })
-  .finally(async () => {
-    await prisma.$disconnect();
-  });
+main();

@@ -2,8 +2,6 @@ export class QuestionAssignmentDomainModel {
   id: string;
   regionId: string;
   questionId: string;
-  scheduledStartAt?: Date;
-  scheduledEndAt?: Date;
   createdAt: Date;
   updatedAt: Date;
 
