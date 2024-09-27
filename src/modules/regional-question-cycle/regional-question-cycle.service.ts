@@ -79,7 +79,7 @@ export class RegionalQuestionCycleService {
       },
     });
 
-    return !overlappingCycle?.id;
+    return !!overlappingCycle?.id;
   }
 
   // ============== get current cycles' question
@@ -96,16 +96,23 @@ export class RegionalQuestionCycleService {
       throw new NotFoundException('User does not belong to any region');
     }
 
+    const dateTimeNow = new Date();
     const currentCycle = await this.prisma.regionalQuestionCycle.findFirst({
       where: {
         regionId: user.regionId,
-        cycleStart: { lte: new Date() },
-        cycleEnd: { gte: new Date() },
+        cycleStart: { lte: dateTimeNow },
+        cycleEnd: { gte: dateTimeNow },
       },
-      include: {
+      select: {
         questionAssignment: {
-          include: {
-            question: true,
+          select: {
+            question: {
+              select: {
+                id: true,
+                content: true,
+                meta: true,
+              },
+            },
           },
         },
       },
@@ -121,8 +128,6 @@ export class RegionalQuestionCycleService {
       questionId: question.id,
       content: question.content,
       meta: question.meta,
-      cycleStart: currentCycle.cycleStart,
-      cycleEnd: currentCycle.cycleEnd,
     };
 
     return dto;
