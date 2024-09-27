@@ -1,3 +1,5 @@
+import { BullMQAdapter } from '@bull-board/api/bullMQAdapter';
+import { BullBoardModule } from '@bull-board/nestjs';
 import { PrismaModule } from '@modules/prisma/prisma.module';
 import { CycleQueue } from '@modules/regional-question-cycle/constants';
 import { RegionalQuestionCycleController } from '@modules/regional-question-cycle/regional-question-cycle.controller';
@@ -21,6 +23,10 @@ import { ConfigService } from '@nestjs/config';
     }),
     BullModule.registerQueue({
       name: CycleQueue,
+    }),
+    BullBoardModule.forFeature({
+      name: CycleQueue,
+      adapter: BullMQAdapter,
     }),
   ],
   controllers: [RegionalQuestionCycleController],

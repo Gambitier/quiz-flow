@@ -1,1 +1,1 @@
-export const CycleQueue = 'cycle-queue';
+export const CycleQueue = 'regional-question-cycle';
