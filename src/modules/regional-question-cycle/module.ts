@@ -2,6 +2,7 @@ import { BullMQAdapter } from '@bull-board/api/bullMQAdapter';
 import { BullBoardModule } from '@bull-board/nestjs';
 import { PrismaModule } from '@modules/prisma/prisma.module';
 import { CycleQueue } from '@modules/regional-question-cycle/constants';
+import { CycleProcessor } from '@modules/regional-question-cycle/queue-processors/cycle.processor';
 import { RegionalQuestionCycleController } from '@modules/regional-question-cycle/regional-question-cycle.controller';
 import { RegionalQuestionCycleService } from '@modules/regional-question-cycle/regional-question-cycle.service';
 import { BullModule } from '@nestjs/bullmq';
@@ -30,6 +31,6 @@ import { ConfigService } from '@nestjs/config';
     }),
   ],
   controllers: [RegionalQuestionCycleController],
-  providers: [RegionalQuestionCycleService],
+  providers: [RegionalQuestionCycleService, CycleProcessor],
 })
 export class RegionalQuestionCycleModule {}
