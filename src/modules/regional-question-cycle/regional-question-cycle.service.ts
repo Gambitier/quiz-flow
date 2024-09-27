@@ -65,9 +65,11 @@ export class RegionalQuestionCycleService {
 
     const nextCycleStart = new Date(cycleEnd);
     nextCycleStart.setSeconds(nextCycleStart.getSeconds() + 1);
+    const delayBeforeCycleEnd = nextCycleStart.getTime() - Date.now() - 60000; // 1 minute before cycle end
 
     const nextCycleEnd = new Date(nextCycleStart);
     nextCycleEnd.setMinutes(nextCycleEnd.getMinutes() + defaultDurationInMin);
+
     try {
       await this.cycleQueue.add(
         `schedule-next-cycle:${regionId}:${nextCycleStart.toISOString()}`,
@@ -82,7 +84,9 @@ export class RegionalQuestionCycleService {
             type: 'exponential',
             delay: 60000,
           },
-          removeOnComplete: true,
+          removeOnFail: false,
+          removeOnComplete: false,
+          delay: delayBeforeCycleEnd,
         },
       );
 
