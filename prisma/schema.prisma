@@ -68,5 +68,5 @@ model RegionalQuestionCycle {
   createdAt            DateTime            @default(now())
   updatedAt            DateTime            @updatedAt
 
-  @@unique([questionAssignmentId, iteration])
+  @@unique([regionId, iteration])
 }
