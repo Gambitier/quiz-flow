@@ -25,8 +25,6 @@ export class QuestionsService {
         id: true,
         regionId: true,
         questionId: true,
-        scheduledStartAt: true,
-        scheduledEndAt: true,
       },
     });
 
@@ -44,8 +42,6 @@ export class QuestionsService {
         id: true,
         regionId: true,
         questionId: true,
-        scheduledStartAt: true,
-        scheduledEndAt: true,
       },
     });
 
