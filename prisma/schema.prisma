@@ -62,12 +62,10 @@ model RegionalQuestionCycle {
   questionAssignment   QuestionAssignment @relation(fields: [questionAssignmentId], references: [id])
   regionId             String             @db.Uuid
   region               Region             @relation(fields: [regionId], references: [id])
-  iteration            Int
   cycleStart           DateTime
   cycleEnd             DateTime
   createdAt            DateTime           @default(now())
   updatedAt            DateTime           @updatedAt
 
-  @@unique([regionId, iteration])
   @@unique([regionId, questionAssignmentId])
 }

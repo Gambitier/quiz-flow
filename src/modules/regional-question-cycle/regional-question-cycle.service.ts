@@ -7,7 +7,9 @@ export class RegionalQuestionCycleService {
   constructor(private readonly prisma: PrismaService) {}
 
   async addNewCycle(data: AddNewCycleDomainModel): Promise<void> {
-    const { id, regionId, iteration, cycleStart, cycleEnd } = data;
+    const { id, regionId, cycleStart, cycleEnd } = data;
+
+    // TODO::P1: validate if cycleStart < cycleEnd
 
     const unassignedQuestionId = await this.getUnassignedQuestionId(regionId);
 
@@ -15,28 +17,13 @@ export class RegionalQuestionCycleService {
       throw new Error('new question for a given region is not available');
     }
 
-    // Check if a cycle with the same regionId and iteration already exists
-    const existingCycle = await this.prisma.regionalQuestionCycle.findUnique({
-      where: {
-        regionId_iteration: {
-          regionId,
-          iteration,
-        },
-      },
-    });
-
-    if (existingCycle) {
-      throw new Error(
-        `cycle already exists for region ${regionId} with iteration ${iteration}`,
-      );
-    }
+    // TODO::P1: check if cycleStart falls within any cycle
 
     await this.prisma.regionalQuestionCycle.create({
       data: {
         id: id,
         questionAssignmentId: unassignedQuestionId,
         regionId: regionId,
-        iteration: iteration,
         cycleStart: cycleStart,
         cycleEnd: cycleEnd,
       },

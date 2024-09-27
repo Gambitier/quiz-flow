@@ -3,21 +3,18 @@
     "id": "6012352e-9493-43c7-8a19-177687d9011d",
     "regionId": "f64bf951-4dbb-4bca-a30b-8b55496655a3",
     "cycleStart": "2024-09-27T15:00:00Z",
-    "cycleEnd": "2024-09-27T16:00:00Z",
-    "iteration": 1
+    "cycleEnd": "2024-09-27T16:00:00Z"
   },
   {
     "id": "942d6edf-2ab8-4563-a0f6-72e39c3525ad",
     "regionId": "61d35e81-f2b8-40af-8f83-b68a0df17524",
     "cycleStart": "2024-09-27T16:00:00Z",
-    "cycleEnd": "2024-09-27T17:00:00Z",
-    "iteration": 1
+    "cycleEnd": "2024-09-27T17:00:00Z"
   },
   {
     "id": "fc25e044-5cf1-4ead-990e-326da0aaaddb",
     "regionId": "87157c2a-d483-41ae-8a2b-fe8c57f1c2cf",
     "cycleStart": "2024-09-27T17:00:00Z",
-    "cycleEnd": "2024-09-27T18:00:00Z",
-    "iteration": 1
+    "cycleEnd": "2024-09-27T18:00:00Z"
   }
 ]
