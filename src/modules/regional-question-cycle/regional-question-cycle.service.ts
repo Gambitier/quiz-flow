@@ -1,9 +1,11 @@
 import { PrismaService } from '@modules/prisma/prisma.service';
 import { AddNewCycleDomainModel } from '@modules/regional-question-cycle/models/domain/';
+import { CurrentCycleQuestionDto } from '@modules/regional-question-cycle/models/dto';
 import {
   BadRequestException,
   ConflictException,
   Injectable,
+  NotFoundException,
 } from '@nestjs/common';
 
 @Injectable()
@@ -78,5 +80,51 @@ export class RegionalQuestionCycleService {
     });
 
     return !overlappingCycle?.id;
+  }
+
+  // ============== get current cycles' question
+  async getCurrentCycleQuestion(
+    userId: string,
+  ): Promise<CurrentCycleQuestionDto> {
+    // Assuming the user has a region assigned and you're linking the region with the current cycle
+    const user = await this.prisma.user.findUnique({
+      where: { id: userId },
+      select: { regionId: true },
+    });
+
+    if (!user?.regionId) {
+      throw new NotFoundException('User does not belong to any region');
+    }
+
+    const currentCycle = await this.prisma.regionalQuestionCycle.findFirst({
+      where: {
+        regionId: user.regionId,
+        cycleStart: { lte: new Date() },
+        cycleEnd: { gte: new Date() },
+      },
+      include: {
+        questionAssignment: {
+          include: {
+            question: true,
+          },
+        },
+      },
+    });
+
+    if (!currentCycle) {
+      throw new NotFoundException('No active cycle found for the region');
+    }
+
+    const { question } = currentCycle.questionAssignment;
+
+    const dto: CurrentCycleQuestionDto = {
+      questionId: question.id,
+      content: question.content,
+      meta: question.meta,
+      cycleStart: currentCycle.cycleStart,
+      cycleEnd: currentCycle.cycleEnd,
+    };
+
+    return dto;
   }
 }
