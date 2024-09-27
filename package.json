@@ -22,7 +22,7 @@
     "seed:regions": "ts-node ./src/seeder/regions/seeder.ts",
     "seed:questions": "ts-node ./src/seeder/questions/seeder.ts",
     "seed:question-assignments": "ts-node ./src/seeder/question-assignments/seeder.ts",
-    "seed:regional-question-cycle": "ts-node ./src/seeder/regional-question-cycle/seeder.ts"
+    "seed:regional-question-cycle": "ts-node -r tsconfig-paths/register ./src/seeder/regional-question-cycle/seeder.ts"
   },
   "dependencies": {
     "@nestjs/common": "^10.0.0",

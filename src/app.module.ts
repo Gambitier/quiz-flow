@@ -5,12 +5,18 @@ import { AuthModule } from '@modules/auth/auth.module';
 import { JwtGuard } from '@modules/auth/guards/jwt-auth.guard';
 import { RolesGuard } from '@modules/auth/guards/role-authz.guard';
 import { QuestionModule } from '@modules/question/question.module';
+import { RegionalQuestionCycleModule } from '@modules/regional-question-cycle/module';
 import { UserModule } from '@modules/user/user.module';
 import { Module } from '@nestjs/common';
 import { APP_FILTER, APP_GUARD, APP_INTERCEPTOR } from '@nestjs/core';
 
 @Module({
-  imports: [UserModule, AuthModule, QuestionModule],
+  imports: [
+    UserModule,
+    AuthModule,
+    QuestionModule,
+    RegionalQuestionCycleModule,
+  ],
   providers: [
     PrismaService,
     {
