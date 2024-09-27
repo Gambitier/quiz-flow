@@ -7,11 +7,15 @@ import { QuestionModule } from '@modules/question/question.module';
 import { RegionalQuestionCycleModule } from '@modules/regional-question-cycle/module';
 import { UserModule } from '@modules/user/user.module';
 import { Module } from '@nestjs/common';
+import { ConfigModule } from '@nestjs/config';
 import { APP_FILTER, APP_GUARD, APP_INTERCEPTOR } from '@nestjs/core';
 import { PrismaModule } from './modules/prisma/prisma.module';
 
 @Module({
   imports: [
+    ConfigModule.forRoot({
+      isGlobal: true,
+    }),
     UserModule,
     AuthModule,
     QuestionModule,
