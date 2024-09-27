@@ -7,6 +7,7 @@ import {
   BadRequestException,
   ConflictException,
   Injectable,
+  Logger,
   NotFoundException,
 } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
@@ -14,6 +15,8 @@ import { Queue } from 'bullmq';
 
 @Injectable()
 export class RegionalQuestionCycleService {
+  private readonly logger = new Logger(RegionalQuestionCycleService.name);
+
   constructor(
     private readonly prisma: PrismaService,
     @InjectQueue(CycleQueue) private readonly cycleQueue: Queue,
@@ -56,32 +59,42 @@ export class RegionalQuestionCycleService {
       },
     });
 
-    const defaultDurationInHours = this.configService.get<number>(
-      'questionCycle.defaultDurationInHours',
+    const defaultDurationInMin = this.configService.get<number>(
+      'questionCycle.defaultDurationInMinutes',
     );
 
     const nextCycleStart = new Date(cycleEnd);
     nextCycleStart.setSeconds(nextCycleStart.getSeconds() + 1);
 
     const nextCycleEnd = new Date(nextCycleStart);
-    nextCycleEnd.setHours(nextCycleEnd.getHours() + defaultDurationInHours);
-
-    await this.cycleQueue.add(
-      `schedule-next-cycle:${regionId}:${cycleStart.toISOString()}`,
-      {
-        regionId,
-        cycleStart: nextCycleStart,
-        cycleEnd: nextCycleEnd,
-      },
-      {
-        attempts: 3,
-        backoff: {
-          type: 'exponential',
-          delay: 60000,
+    nextCycleEnd.setMinutes(nextCycleEnd.getMinutes() + defaultDurationInMin);
+    try {
+      await this.cycleQueue.add(
+        `schedule-next-cycle:${regionId}:${nextCycleStart.toISOString()}`,
+        {
+          regionId,
+          cycleStart: nextCycleStart,
+          cycleEnd: nextCycleEnd,
         },
-        removeOnComplete: true,
-      },
-    );
+        {
+          attempts: 3,
+          backoff: {
+            type: 'exponential',
+            delay: 60000,
+          },
+          removeOnComplete: true,
+        },
+      );
+
+      this.logger.log(
+        `Scheduled next cycle for region ${regionId} from ${nextCycleStart.toISOString()} to ${nextCycleEnd.toISOString()}`,
+      );
+    } catch (error) {
+      this.logger.error(
+        `Failed to schedule next cycle for region ${regionId}: ${error.message}`,
+        error.stack,
+      );
+    }
   }
 
   private async getUnassignedQuestionId(
