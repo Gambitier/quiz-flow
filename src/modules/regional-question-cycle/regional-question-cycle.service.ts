@@ -1,6 +1,10 @@
 import { PrismaService } from '@modules/prisma/prisma.service';
 import { AddNewCycleDomainModel } from '@modules/regional-question-cycle/models/domain/';
-import { Injectable } from '@nestjs/common';
+import {
+  BadRequestException,
+  ConflictException,
+  Injectable,
+} from '@nestjs/common';
 
 @Injectable()
 export class RegionalQuestionCycleService {
@@ -10,7 +14,9 @@ export class RegionalQuestionCycleService {
     const { id, regionId, cycleStart, cycleEnd } = data;
 
     if (cycleStart >= cycleEnd) {
-      throw new Error('Cycle start date must be before cycle end date.');
+      throw new BadRequestException(
+        'Cycle start date must be before cycle end date.',
+      );
     }
 
     const overlappingCycle = await this.cycleOverlapsWithExisting(
@@ -18,14 +24,16 @@ export class RegionalQuestionCycleService {
       cycleStart,
     );
     if (overlappingCycle) {
-      throw new Error(
+      throw new BadRequestException(
         'A cycle already exists for this region during the specified time range.',
       );
     }
 
     const unassignedQuestionId = await this.getUnassignedQuestionId(regionId);
     if (!unassignedQuestionId) {
-      throw new Error('No new questions are available for this region.');
+      throw new ConflictException(
+        'No new questions are available for this region.',
+      );
     }
 
     await this.prisma.regionalQuestionCycle.create({
