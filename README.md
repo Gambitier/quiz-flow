@@ -39,22 +39,21 @@ npm run start:prod
 
 ```mermaid
 flowchart TD
-    subgraph Admin_Actions
-        A[Admin Adds New Cycle] -->|Creates Cycle| B[/Queue 1/]
-    end
+  subgraph Admin_Actions
+    A[Admin Adds New Cycle] -->|Creates Cycle| B[(Database: RegionalQuestionCycle)]
+  end
+  
+  subgraph Queue_Processor
+    B --> C[/Queue: Schedule Next Cycle/]
+    C --> D[[Processor: Schedule Next Cycle]]
+    D -->|Check if Overlapping Cycle Exists| E{Cycle Overlap?}
+    E -->|Yes| F[Skip Cycle Creation]
+    E -->|No| G[Check if questions for a given region available]
+    G -->|No| F[Skip Cycle Creation]
+    G -->|Yes: Create next cycle| B
+  end
 
-    subgraph Queue_1_Assign_Question
-        B --> C[[Processor: Assign Question]]
-        C -->|Assign Region's Question| D[(Database: QuestionAssignment)]
-        D -->|Update Assignment| E[/Queue 2/]
-        C -->|No Questions Available| F[TODO: Handle No Questions]
-    end
-
-    subgraph Queue_2_Schedule_Next_Cycle
-        E --> G[[Processor: Schedule Next Cycle]]
-        G --> H{Check: Next Cycle Exists?}
-        H -->|Yes| I[No Action]
-        H -->|No| J[(Database: Schedule Default 7-Day Cycle)]
-        J -->|New Cycle| B
-    end
+  subgraph Queue_Retry_Mechanism
+    D --> H[Retry 3 times if error]
+  end
 ```
